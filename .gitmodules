@@ -31,3 +31,9 @@
 [submodule "lib/nxp/mcux-sdk"]
 	path = lib/nxp/mcux-sdk
 	url = https://github.com/NXPmicro/mcux-sdk.git
+[submodule "lib/nxp_blhost_sdphost"]
+	path = lib/nxp_blhost_sdphost
+	url = git@github.com:apexrtos/nxp_blhost_sdphost.git
+[submodule "lib/nxp/nxp_blhost_sdphost"]
+	path = lib/nxp/nxp_blhost_sdphost
+	url = git@github.com:apexrtos/nxp_blhost_sdphost.git
