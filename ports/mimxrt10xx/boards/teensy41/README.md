@@ -19,6 +19,15 @@ pip install platformio
 ```
 
 ## Now, you should be able to enter the ROM bootloader
+NOTE:  you MUST have pin 25 of the teensy pulled high.  This is
+GPIO_AD_B0_13, which is the UART bootloader pin.  If this is low, then
+the ROM bootloader thinks you want to load from UART.  I mean... maybe
+you do, but I don't for now.
+
+This is easy to accomplish with tweezers betwee pin 25 and the nearly
+adjacent 3.3V 2 pins away.
+
+
 ### The way that works for now:
 upload a bogus hex file
 ```bash
