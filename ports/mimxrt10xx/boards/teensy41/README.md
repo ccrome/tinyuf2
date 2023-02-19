@@ -1,5 +1,24 @@
 # Teensy 4.1 support for UF2
 
+## Will this work?
+I think what's in loader-loader should be roughtly what does it. I
+didn't bring a teensy with my on vacation, so can't try it. 
+
+I checked the .elf file and the highest used itcm address in the
+genearted file is well below 0x1000, so I believe the whole ITCM is
+available to just copy the tinyuf2 over at the 0x1000 address.
+
+Anything wrong with this approach?
+
+run the file `loader-loader/convert-to-header.py` to convert the
+`tinyuf2.bin` file to a `.h` file, copy and jump.
+
+Should work, right?
+
+
+
+## older hacky stuff
+
 To get tinyuf2 to run on the Teensy, we need to load it properly.  The known working method is
 get the teensy into the ROM bootloader mode, then load tinyuf2.
 
