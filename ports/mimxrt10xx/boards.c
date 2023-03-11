@@ -39,6 +39,12 @@
 #include "tusb.h"
 #endif
 
+// allow board.h to change the pin configuration for the button
+#ifndef BUTTON_PIN_CONFIG
+// default to 22k pull up
+#define BUTTON_PIN_CONFIG ((1<<16) | (3<<14) | (1<<13) | (1<<12) | (4<<3))
+#endif
+
 static bool _dfu_mode = false;
 
 // needed by fsl_flexspi_nor_boot
@@ -80,10 +86,31 @@ void board_init(void)
   GPIO_PinInit(NEOPIXEL_PORT, NEOPIXEL_PIN, &neopixel_config);
 #endif
 
+#if TINYUF2_DFU_BUTTON
+  // Button
+  IOMUXC_SetPinMux( BUTTON_PINMUX, 1U);
+  IOMUXC_SetPinConfig(BUTTON_PINMUX, BUTTON_PIN_CONFIG);
+  gpio_pin_config_t button_config = { kGPIO_DigitalInput, 0, kGPIO_NoIntmode };
+  GPIO_PinInit(BUTTON_PORT, BUTTON_PIN, &button_config);
+  timer_set_ticks(0);
+  timer_start(1);
+  while(timer_uptime() < 20);
+  timer_stop();
+  timer_set_ticks(0);
+#endif
+
 #if TUF2_LOG
   board_uart_init(BOARD_UART_BAUDRATE);
 #endif
 }
+
+#if TINYUF2_DFU_BUTTON
+uint32_t board_button_read(void)
+{
+  uint32_t pressed = !!(BUTTON_STATE_ACTIVE == GPIO_PinRead(BUTTON_PORT, BUTTON_PIN));
+  return pressed;
+}
+#endif
 
 void board_teardown(void)
 {
@@ -241,8 +268,10 @@ void board_app_jump(void)
 
 void board_timer_start(uint32_t ms)
 {
-  // due to highspeed SystemCoreClock = 600 mhz, max interval of 24 bit systick is only 27 ms
-  const uint32_t tick = (SystemCoreClock/1000) * ms;
+  uint32_t tick = (SystemCoreClock/1000) * ms;
+  if (tick > SysTick_LOAD_RELOAD_Msk)
+      // if requesting too long an interval, just pick the longest we can support.
+      tick = SysTick_LOAD_RELOAD_Msk;
   SysTick_Config( tick );
 }
 
@@ -253,7 +282,7 @@ void board_timer_stop(void)
 
 void SysTick_Handler(void)
 {
-  board_timer_handler();
+    board_timer_handler();
 }
 
 //--------------------------------------------------------------------+

@@ -69,6 +69,7 @@
 //--------------------------------------------------------------------+
 
 // SW8 button
+#define TINYUF2_DFU_BUTTON    1
 #define BUTTON_PINMUX         IOMUXC_GPIO_SD_05_GPIO2_IO05
 #define BUTTON_PORT           GPIO2
 #define BUTTON_PIN            5

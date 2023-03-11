@@ -98,6 +98,31 @@ void board_reset(void);
 // Write PWM duty value to LED
 void board_led_write(uint32_t value);
 
+#ifndef TINYUF2_DFU_BUTTON
+  #define TINYUF2_DFU_BUTTON 0
+#endif
+
+#if TINYUF2_DFU_BUTTON
+  // Read button.  Return a bitmask of which buttons are pressed.
+  uint32_t board_button_read(void);
+
+  // Hold the button for this many milliseconds to erase the app.
+  #ifndef TINYUF2_DFU_BUTTON_ERASE_TIMEOUT
+    #define TINYUF2_DFU_BUTTON_ERASE_TIMEOUT (5000)
+  #endif
+
+  // This is a bitmask used to check which button will cause a stay-in-dfu-mode
+  // default to use any button
+  // I'm somewhat unsure of how to deal with multiple buttons?
+  // perhaps instead of (or in addition to) board_button_read, there can be a 
+  // weak function called board_button_read_force_dfu() or something like that
+  // and that will leave the logic of when to enter the forced DFU mode up to 
+  // the individual boards.
+  #ifndef TINYUF2_DFU_BUTTON_FORCE_MASK
+    #define TINYUF2_DFU_BUTTON_FORCE_MASK 0xFFFFFFFF
+  #endif
+#endif
+
 // Write color to rgb strip
 void board_rgb_write(uint8_t const rgb[]);
 
@@ -251,9 +276,27 @@ enum {
   STATE_USB_UNPLUGGED,         ///< STATE_USB_UNPLUGGED
   STATE_WRITING_STARTED,       ///< STATE_WRITING_STARTED
   STATE_WRITING_FINISHED,      ///< STATE_WRITING_FINISHED
+  STATE_BUTTON_STAY_IN_DFU,    ///< STATE_BUTTON_STAY_IN_DFU
+  STATE_UNUSED,                ///< STATE_UNUSED
 };
 
+// Set the state of the app, including the indicators
 void indicator_set(uint32_t state);
+
+// Get the app state
+uint32_t indicator_get(void);
+
+// Start a timer with a tick of interval_ms
+void timer_start(uint32_t interval_ms);
+
+// top the timer
+void timer_stop(void);
+
+// Set the current tick count
+void timer_set_ticks(uint32_t ticks);
+
+// get uptime in ms.  Currently, this isn't counted when the timer is stopped.
+uint32_t timer_uptime(void);
 
 static inline void rgb_brightness(uint8_t out[3], uint8_t const in[3], uint8_t brightness)
 {
