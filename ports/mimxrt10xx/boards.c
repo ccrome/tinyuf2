@@ -92,11 +92,13 @@ void board_init(void)
   IOMUXC_SetPinConfig(BUTTON_PINMUX, BUTTON_PIN_CONFIG);
   gpio_pin_config_t button_config = { kGPIO_DigitalInput, 0, kGPIO_NoIntmode };
   GPIO_PinInit(BUTTON_PORT, BUTTON_PIN, &button_config);
+#ifndef BUILD_NO_TINYUSB
   timer_set_ticks(0);
   timer_start(1);
-  while(timer_uptime() < 20);
+  while(timer_uptime() < TINYUF2_BUTTON_SETTLE_DELAY);
   timer_stop();
   timer_set_ticks(0);
+#endif  
 #endif
 
 #if TUF2_LOG

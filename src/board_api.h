@@ -121,6 +121,11 @@ void board_led_write(uint32_t value);
   #ifndef TINYUF2_DFU_BUTTON_FORCE_MASK
     #define TINYUF2_DFU_BUTTON_FORCE_MASK 0xFFFFFFFF
   #endif
+  #ifndef TINYUF2_BUTTON_SETTLE_DELAY
+    // default to no settling time for button startup.  This will
+    // if more settling time is needed, add it in the board.h file
+    #define TINYUF2_BUTTON_SETTLE_DELAY 0
+  #endif
 #endif
 
 // Write color to rgb strip
