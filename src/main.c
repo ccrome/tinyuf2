@@ -106,7 +106,7 @@ int main(void)
 // return true if start DFU mode, else App mode
 static bool check_dfu_mode(void)
 {
-  // TODO enable for all port instead of one with double tap
+    // TODO enable for all port instead of one with double tap
 #if TINYUF2_DFU_BUTTON
   // always stay in dfu mode if the button is pressed.
   // wait for a few milliseconds for the switch pin to reach its pulled value.
@@ -136,7 +136,7 @@ static bool check_dfu_mode(void)
     indicator_set(STATE_WRITING_STARTED);
     board_flash_erase_app();
     indicator_set(STATE_WRITING_FINISHED);
-
+    return true;
     // TODO maybe reset is better than continue
   }
 #endif
