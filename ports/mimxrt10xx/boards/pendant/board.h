@@ -65,13 +65,13 @@
 
 #define USB_VID           0x239A
 #define USB_PID           0x00AD
-#define USB_MANUFACTURER  "PJRC"
-#define USB_PRODUCT       "Teensy 4.1"
+#define USB_MANUFACTURER  "Signal Essence"
+#define USB_PRODUCT       "Pendant 1.0"
 
 #define UF2_PRODUCT_NAME  USB_MANUFACTURER " " USB_PRODUCT
 #define UF2_BOARD_ID      "MIMXRT1060-TEENSY-41"
-#define UF2_VOLUME_LABEL  "TNSY41BOOT"
-#define UF2_INDEX_URL     "https://www.pjrc.com/store/teensy41.html"
+#define UF2_VOLUME_LABEL  "PENDBOOT"
+#define UF2_INDEX_URL     "signalessence.com"
 
 //--------------------------------------------------------------------+
 // UART
